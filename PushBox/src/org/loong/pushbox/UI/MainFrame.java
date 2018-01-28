@@ -1,20 +1,11 @@
 package org.loong.pushbox.UI;
 
-import java.awt.Color;
-import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.net.MalformedURLException;
 import java.util.Stack;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import org.loong.pushbox.Audio;
 
@@ -47,6 +38,9 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 	//二维数组，存放当前关卡的地图数据
 	private int map[][] = new int[12][16];
 	
+	//Audio对象，用于播放音效
+	Audio audio;
+	
 	//是否是正常移动过程中的首次悔步操作
 	boolean first_undo_time;
 	
@@ -63,6 +57,15 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 		this.addWindowListener(this);
 		//添加键盘事件监听器
 		this.addKeyListener(this);
+		
+		//初始化音效
+		try {
+			audio = new Audio();
+		}
+		catch(MalformedURLException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -244,7 +247,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 		//初始化菜单栏
 		menubarInit();
 		//播放声音
-		Audio.playWinner();
+		audio.playWinner();
 		
 	}
 	
@@ -297,7 +300,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 					soldier_x--;
 					current_steps++;
 					//播放声音
-					Audio.playStep();
+					audio.playStep();
 					break;
 				}
 				
@@ -333,7 +336,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 					soldier_x--;
 					current_steps++;
 					//播放声音
-					Audio.playStep();
+					audio.playStep();
 					break;
 				}
 				
@@ -355,7 +358,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 					soldier_x++;
 					current_steps++;
 					//播放声音
-					Audio.playStep();
+					audio.playStep();
 					break;
 				}
 				
@@ -390,7 +393,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 					soldier_x++;
 					current_steps++;
 					//播放声音
-					Audio.playStep();
+					audio.playStep();
 					break;
 				}
 				
@@ -412,7 +415,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 					soldier_y--;
 					current_steps++;
 					//播放声音
-					Audio.playStep();
+					audio.playStep();
 					break;
 				}
 				
@@ -447,7 +450,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 					soldier_y--;
 					current_steps++;
 					//播放声音
-					Audio.playStep();
+					audio.playStep();
 					break;
 				}
 				
@@ -469,7 +472,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 					soldier_y++;
 					current_steps++;
 					//播放声音
-					Audio.playStep();
+					audio.playStep();
 					break;
 				}
 				
@@ -504,7 +507,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 					soldier_y++;
 					current_steps++;
 					//播放声音
-					Audio.playStep();
+					audio.playStep();
 					break;
 				}
 				
@@ -530,9 +533,9 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 	@Override
 	public void windowClosing(WindowEvent e) {
 		//播放声音
-		Audio.playStep();
+		audio.playStep();
 		//确认消息对话框
-		Object[] options ={"不，我还要玩", "嗯，没错" };
+		Object[] options ={"不，我还要玩", "直接退出" };
 		int choice = JOptionPane.showOptionDialog(this, "您确定要结束游戏吗？", "埋队友", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 		if(choice == 1)
 		{
@@ -545,7 +548,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//播放声音
-		Audio.playClick();
+		audio.playClick();
 		//判断按钮类型，以执行对应操作
 		if(e.getSource() == button_undo)
 		{
@@ -553,7 +556,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 			if(path.isEmpty())
 			{
 				//播放声音
-				Audio.playMsg();
+				audio.playMsg();
 				JOptionPane.showMessageDialog(this, "已经是从头开始了", "提示", JOptionPane.OK_OPTION);
 				this.setFocusable(true);
 				this.requestFocus();
@@ -689,7 +692,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 				//弹出窗体对话框，点取消则返回
 				String input;
 				//播放声音
-				Audio.playMsg();
+				audio.playMsg();
 				if((input = JOptionPane.showInputDialog("请输入关卡数：", current_maps + 1)) == null)
 				{
 					return;
@@ -701,7 +704,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 				if((choice - 1) > MapModel.map_model.length || (choice - 1) < 0)
 				{
 					//播放声音
-					Audio.playMsg();
+					audio.playMsg();
 					//数值无效的异常处理，消息提示
 					JOptionPane.showMessageDialog(this, "请输入 1 ～ " + (MapModel.map_model.length) + "之间的整数", "提示", JOptionPane.OK_OPTION);
 					this.requestFocus();
@@ -729,7 +732,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 			{
 				System.out.println(ex.getStackTrace());
 				//播放声音
-				Audio.playMsg();
+				audio.playMsg();
 				//数值无效的异常处理，消息提示
 				JOptionPane.showMessageDialog(this, "请输入 1 ～ " + (MapModel.map_model.length) + "之间的整数", "提示", JOptionPane.OK_OPTION);
 				this.requestFocus();
@@ -741,7 +744,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 			if(current_maps <= 0)
 			{
 				//播放声音
-				Audio.playMsg();
+				audio.playMsg();
 				JOptionPane.showMessageDialog(this, "已是第一关！", "提示", JOptionPane.OK_OPTION);
 				this.setFocusable(true);
 				this.requestFocus();
@@ -770,7 +773,7 @@ public class MainFrame extends Frame implements KeyListener, WindowListener, Act
 			if(current_maps >= MapModel.map_model.length - 1)
 			{
 				//播放声音
-				Audio.playMsg();
+				audio.playMsg();
 				JOptionPane.showMessageDialog(this, "已是最后一关！", "提示", JOptionPane.OK_OPTION);
 				this.setFocusable(true);
 				this.requestFocus();

@@ -10,48 +10,32 @@ import java.io.File;
 
 public class Audio{ 
 	
-	private static File msg = new File("msg.wav");
-	private static File click = new File("click.wav");
-	private static File step = new File("step.wav");
-	private static File winner = new File("winner.wav");
+	private static AudioClip msg;
+	private static AudioClip click;
+	private static AudioClip step;
+	private static AudioClip winner;
 	
-	public static void playMsg(){
-		try {
-			AudioClip ac = Applet.newAudioClip(msg.toURL());
-			ac.play();
-		}
-		catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+	public Audio() throws MalformedURLException
+	{
+		msg = Applet.newAudioClip((new File("msg.wav")).toURL());
+		click = Applet.newAudioClip((new File("click.wav")).toURL());
+		step = Applet.newAudioClip((new File("step.wav")).toURL());
+		winner = Applet.newAudioClip((new File("winner.wav")).toURL());
 	}
 	
-	public static void playWinner(){
-		try {
-			AudioClip ac = Applet.newAudioClip(winner.toURL());
-			ac.play();
-		}
-		catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+	public void playMsg(){
+		msg.play();
 	}
 	
-	public static void playClick(){
-		try {
-			AudioClip ac = Applet.newAudioClip(click.toURL());
-			ac.play();
-		}
-		catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+	public void playWinner(){
+		winner.play();
 	}
 	
-	public static void playStep(){
-		try {
-			AudioClip ac = Applet.newAudioClip(step.toURL());
-			ac.play();
-		}
-		catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+	public void playClick(){
+		click.play();
+	}
+	
+	public void playStep(){
+		step.play();
 	}
 } 
